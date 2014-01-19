@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>csc309 a1 Charuvit Wannissorn</title>
+	<link rel="Stylesheet" type="text/css" href="index.css" />
+	<link rel="stylesheet" type="text/css" href="spectrum.css" />
+    <script type="text/javascript" src="jquery-2.0.3.js"></script>
+	<script src="Shapes.js"></script>
+	<script src='spectrum.js'></script>
+  </head>
+  <body>
+  <aside class="NavSidebar">
+    <h3> Tools </h3>
+	<input type="button" onclick="selectTool(0)" value="Select / Move" />
+	<input type="button" onclick="selectTool(1)" value="Line Tool" />
+	<input type="button" onclick="selectTool(2)" value="Triangle Tool" />
+	<input type="button" onclick="selectTool(3)" value="Rectangle Tool" />
+	
+	<h3> Properties </h3>
+	Line Width: <br><input type="text" id="line_width" value="2" size="3"/>px<br>
+	Line Color: <br><input type='text' id="line_color" /><br> 
+	Fill Color: <br><input type='text' id="fill_color" /><br>
+	
+	<h3> Actions </h3>
+	Resize: 
+	<input type="button" id="resize_button" onclick="increaseSize()" value="+" />
+	<input type="button" id="resize_button" onclick="decreaseSize()" value="-" />
+	<input type="button" onclick="copyShape()" value="Copy" />
+	<input type="button" onclick="pasteShape()" value="Paste" />
+	<input type="button" onclick="eraseShape()" value="Erase" />
+	<input type="button" onclick="clearCanvas()" value="Clear Canvas" />
+  </aside>
+   <canvas id="canvas" width="533" height="533"></canvas>
+  </body>
+</html>
