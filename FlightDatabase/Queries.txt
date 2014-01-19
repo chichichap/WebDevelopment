@@ -1,0 +1,254 @@
+drop table traveller_d1;
+drop table traveller_d2;
+drop table traveller_a1;
+drop table traveller_a2;
+drop table class_p;
+drop table baggages;
+drop table passenger;
+
+drop table departs;
+drop table arrivals;
+drop table outgoing_F;
+drop table incoming_F;
+
+drop table plane_model;
+drop table flight;
+drop table airline;
+----------- Done dropping the tables ------------ 
+
+create table airline (A_code int primary key, website varchar(50), a_name varchar(50) );
+create table flight (F_number int primary key, source varchar(50), destination varchar(50), A_code int references airline (A_code) ON DELETE CASCADE);
+create table plane_model (m_code varchar(40), capacity varchar(50), F_number int references flight(F_number) ON DELETE CASCADE);
+create table incoming_f (planned_date date, F_number int references flight(F_number) ON DELETE CASCADE );
+create table outgoing_f (planned_date date, F_number int references flight(F_number) ON DELETE CASCADE );
+create table arrivals (arrival_date date, arrival_status varchar(50), arrival_gate varchar(30), F_number int references flight(F_number) ON DELETE CASCADE );
+create table departs (depart_date date, depart_status varchar(50), depart_gate varchar(30), F_number int references flight(F_number) ON DELETE CASCADE );
+create table passenger(traveller_id int primary key, p_name varchar(30), place_birth varchar(40), DOB date);
+create table class_p( class varchar(40), section varchar(30), traveller_id int references passenger(traveller_id) ON DELETE CASCADE);
+create table baggages(bid int primary key); 
+create table traveller_a1 (traveller_id int references passenger(traveller_id) ON DELETE CASCADE, F_number int references flight(F_number) ON DELETE CASCADE, class_a varchar(40));
+create table traveller_a2 (traveller_id int references passenger(traveller_id) ON DELETE CASCADE, F_number int references flight(F_number) ON DELETE CASCADE, bid int references baggages(bid));
+create table traveller_d1 (traveller_id int references passenger(traveller_id) ON DELETE CASCADE, F_number int references flight(F_number) ON DELETE CASCADE, class_d varchar(40)); 
+create table traveller_d2 (traveller_id int references passenger(traveller_id) ON DELETE CASCADE, F_number int references flight(F_number) ON DELETE CASCADE, bid int references baggages(bid));
+
+-------------- Done creating the tables -------------
+
+insert into airline values(601, 'www.jet.com', 'Jet Airways');
+insert into airline values(602,'www.wesvraft.ca','Air Canada');
+insert into airline values(603,'www.delta.com','Delta Airlines');
+insert into airline values(604,'www.lufthansa.com','Lufthansa');
+insert into airline values(605,'www.southwest.com','Southest Airines');
+
+insert into flight values (100,'Bombay','Newyork',601);
+insert into flight values (101,'Newyork', 'Taco City', 602);
+insert into flight values (109,'Newyork', 'Taco City', 601);
+insert into flight values (301,'Chicago', 'Seattle', 603);
+insert into flight values (302,'San Antonio', 'Los Angeles', 603);
+insert into flight values (303,'Las Vegas', 'New York', 603);
+insert into flight values (304,'Seattle', 'Los Angeles', 603);
+insert into flight values (305,'Chicago', 'Los Angeles', 603);
+insert into flight values (200,'Bombay','AP',602);
+insert into flight values (203,'Bombay','Hyderabad',601);
+insert into flight values (201,'Delhi','Hyderabad',601);
+insert into flight values (202,'pune','Hyderabad',601);
+insert into flight values (401,'Chicago', 'Seattle', 604);
+insert into flight values (402,'San Antonio', 'Los Angeles', 604);
+insert into flight values (403,'Las Vegas', 'New York', 604);
+insert into flight values (404,'Seattle', 'Los Angeles', 604);
+
+insert into plane_model values ('A201','25 including staff', 100);
+insert into plane_model values ('A201','25 including staff', 101);
+insert into plane_model values ('A301','20 including staff', 109);
+insert into plane_model values ('A301','20 including staff', 301);
+insert into plane_model values ('A747','30 including staff', 302);
+insert into plane_model values ('A747','30 including staff', 303);
+insert into plane_model values ('A747','30 including staff', 304);
+insert into plane_model values ('A500','30 including staff', 305);
+insert into plane_model values ('A500','30 including staff', 200);
+insert into plane_model values ('A500','30 including staff', 203);
+insert into plane_model values ('A500','25 including staff', 201);
+insert into plane_model values ('A500','25 including staff', 202);
+insert into plane_model values ('A201','25 including staff', 401);
+insert into plane_model values ('A301','20 including staff', 402);
+insert into plane_model values ('A301','20 including staff', 403);
+insert into plane_model values ('A747','30 including staff', 404);
+
+insert into incoming_F values ('14-MAY-14', 100);
+insert into incoming_F values ('20-MAY-14', 109);
+insert into outgoing_F values('15-MAY-14',101);
+insert into outgoing_F values('14-MAY-14',200);
+insert into outgoing_F values('23-MAY-14',203);
+
+insert into incoming_F values ('20-JULY-14', 301);
+insert into incoming_F values ('25-JUNE-14', 302);
+insert into outgoing_F values('20-JULY-14',303);
+insert into outgoing_F values('21-JULY-14',304);
+insert into outgoing_F values('23-MAY-14',305);
+
+insert into incoming_F values ('21-JULY-14', 401);
+insert into incoming_F values ('26-JUNE-14', 402);
+insert into outgoing_F values('21-JULY-14',403);
+insert into outgoing_F values('26-JUNE-14',404);
+
+insert into arrivals values('21-JULY-14','on time at','G29',401);
+insert into arrivals values('26-JUNE-14','on time at','G11',402);
+insert into departs values('21-JULY-14','on time at', 'G15',403);
+insert into departs values('26-JUNE-14','on time at', 'G17',404);
+
+insert into arrivals values('15-MAY-14','delayed to','G30',100);
+insert into arrivals values('30-MAY-14','delayed to','G30',109);
+insert into departs values('18-MAY-14','delayed to', 'G30',101);
+insert into departs values('14-MAY-14','on time at', 'G30',200);
+insert into departs values('23-MAY-14','on time at', 'G30',203);
+
+insert into arrivals values('21-JULY-14','delayed to','G26',301);
+insert into arrivals values('25-JULY-14','on time at','G42',302);
+insert into departs values('21-JULY-14','delayed to', 'G11',303);
+insert into departs values('21-JULY-14','on time at', 'G12',304);
+insert into departs values('23-MAY-14','on time at', 'G13',305);
+
+insert into passenger values(2300,'Mark','BC','13-JUNE-13');
+insert into passenger values(2400,'Chris','Ontario','27-JUNE-13');
+
+insert into passenger values(2500,'John','New York','15-JULY-09');
+insert into passenger values(2501,'Lee','Chicago','21-MARCH-17');
+insert into passenger values(2502,'Sarah','Montreal','18-NOVEMBER-12');
+insert into passenger values(2503,'Kelsey','Washington','13-OCTOBER-11');
+insert into passenger values(2600,'Jeremy','Alberta','16-AUGUST-05');
+
+insert into class_p values( 'first class','AQ',2400);
+insert into class_p values( 'second class','AR',2300);
+insert into class_p values( 'first class','AQ',2500);
+insert into class_p values( 'second class','AR',2501);
+insert into class_p values( 'first class','AQ',2502);
+insert into class_p values( 'second class','AR',2503);
+insert into class_p values( 'business class','AQ',2600);
+
+insert into baggages values(1345);
+insert into baggages values(1346);
+insert into baggages values(1347);
+insert into baggages values(1348);
+insert into baggages values(1349);
+insert into baggages values(1400);
+insert into baggages values(1401);
+
+insert into traveller_a1 values(2300, 100,'second class');
+insert into traveller_a2 values(2300, 100, 1345);
+insert into traveller_d1 values(2300, 101, 'second class');
+insert into traveller_d2 values(2300, 101, 1345);
+insert into traveller_d1 values(2400, 200, 'first class');
+insert into traveller_d2 values(2400, 200, 1346);
+
+insert into traveller_a1 values(2500, 301,'first class');
+insert into traveller_a2 values(2500, 301, 1347);
+insert into traveller_d1 values(2500, 303, 'first class');
+insert into traveller_d2 values(2500, 303, 1347);
+insert into traveller_d1 values(2500, 304, 'first class');
+insert into traveller_d2 values(2500, 304, 1347);
+insert into traveller_a1 values(2501, 301,'second class');
+insert into traveller_a2 values(2501, 301, 1348);
+insert into traveller_d1 values(2501, 304, 'second class');
+insert into traveller_d2 values(2501, 304, 1348);
+
+insert into traveller_a1 values(2502, 100,'first class');
+insert into traveller_a2 values(2502, 100, 1348);
+insert into traveller_d1 values(2502, 305, 'first class');
+insert into traveller_d2 values(2502, 305, 1348);
+
+insert into traveller_a1 values(2503, 109,'second class');
+insert into traveller_a2 values(2503, 109, 1349);
+
+insert into traveller_d1 values(2503, 203, 'second class');
+insert into traveller_d2 values(2503, 203, 1349);
+
+
+insert into traveller_a1 values(2503, 401,'second class');
+insert into traveller_a2 values(2503, 401, 1400);
+insert into traveller_d1 values(2503, 403, 'second class');
+insert into traveller_d2 values(2503, 403, 1400);
+
+insert into traveller_a1 values(2503, 402,'first class');
+insert into traveller_a2 values(2503, 402, 1400);
+insert into traveller_a1 values(2502, 402,'first class');
+insert into traveller_a2 values(2502, 402, 1401);
+insert into traveller_d1 values(2600, 404, 'business class');
+insert into traveller_d2 values(2600, 404, 1401);
+
+--4a
+SELECT F_number 
+FROM flight 
+WHERE A_code = (select A_code from airline where a_name = 'Jet Airways');
+
+--4b
+(SELECT F_number,source, destination
+FROM flight 
+WHERE destination = 'Newyork')
+UNION
+(SELECT F_number,source, destination
+FROM flight 
+WHERE source = 'Newyork');
+
+--4c 
+(SELECT F_number, arrival_status AS status, arrival_date
+FROM arrivals NATURAL JOIN incoming_f
+WHERE planned_date = '14-MAY-14')
+UNION
+(SELECT F_number, depart_status AS status, depart_date
+FROM departs NATURAL JOIN outgoing_f
+WHERE planned_date = '14-MAY-14');
+
+--4d
+--given an arrival (date-time), find the passengers and their info
+SELECT traveller_id, f_number, class_a AS class, p_name, place_birth, DOB
+FROM passenger NATURAL JOIN traveller_a1 NATURAL JOIN incoming_f
+WHERE planned_date = '14-MAY-14';
+--given a departure (date-time), find the passengers and their info (need the f_num; otherwise will show duplicates)
+SELECT traveller_id, f_number, class_d AS class, p_name, place_birth, DOB
+FROM (passenger NATURAL JOIN traveller_d1) NATURAL JOIN outgoing_f
+WHERE planned_date = '15-MAY-14';
+
+--4e
+(SELECT p_name, bid
+FROM passenger NATURAL JOIN traveller_a2 NATURAL JOIN incoming_f
+WHERE F_number = '100')
+UNION
+(SELECT p_name, bid
+FROM passenger NATURAL JOIN traveller_d2 NATURAL JOIN outgoing_f 
+WHERE F_number = '100');
+
+--5a ***
+SELECT X.F_number, Y.F_number
+FROM incoming_f X, outgoing_f Y
+WHERE (Y.planned_date - X.planned_date) >= 0 AND (Y.planned_date - X.planned_date) <= 3;
+--5b
+drop view incoming_p;
+drop view outgoing_p;
+CREATE VIEW Incoming_p AS
+SELECT traveller_id, p_name, source, destination, F_number
+FROM passenger NATURAL JOIN traveller_a1 NATURAL JOIN flight;
+CREATE VIEW Outgoing_p AS
+SELECT traveller_id, p_name, source, destination, F_number
+FROM passenger NATURAL JOIN traveller_d1 NATURAL JOIN flight;
+
+SELECT traveller_id, p_name 
+FROM Incoming_p JOIN Outgoing_p USING(traveller_id,p_name)
+WHERE Incoming_p.destination = Outgoing_p.source;
+
+--5c
+CREATE VIEW Top_Passengers AS 
+SELECT traveller_id, p_name,COUNT(F_number) AS F_count 
+FROM ((SELECT traveller_id, p_name, F_number FROM Incoming_p) UNION (SELECT traveller_id, p_name, F_number FROM Outgoing_p)) 
+GROUP BY traveller_id, p_name 
+ORDER by F_count DESC; 
+SELECT * 
+FROM Top_Passengers 
+WHERE rownum < 4;
+
+--5d *** 
+CREATE VIEW All_routes AS
+SELECT source, destination, A_code, delay 
+FROM (SELECT source, destination, A_code, (arrival_date - planned_date) AS delay FROM (flight NATURAL JOIN Incoming_f NATURAL JOIN Arrivals))
+UNION (SELECT source, destination, A_code, (depart_date - planned_date) AS delay FROM (flight NATURAL JOIN Outgoing_f NATURAL JOIN Departs));
+SELECT source, destination, A_code, delay
+FROM All_routes
+WHERE (source, destination, delay) in (SELECT source, destination, MAX(delay) FROM All_routes GROUP BY source, destination);
